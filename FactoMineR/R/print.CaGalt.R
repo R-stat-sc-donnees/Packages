@@ -1,3 +1,4 @@
+## commentaire inutile
 print.CaGalt<-function (x, file = NULL, sep = ";", ...) 
 {
 	res.cagalt <- x
