@@ -150,6 +150,7 @@ if (choix=="ca"){
 
     if (is.null(title)) titre <- "CA factor map"
     else titre <- title
+    if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
     plot(0, 0, main = titre, xlab = paste("Dim ",axes[1]," (",format(res.ca$eig[axes[1],2],nsmall=2,digits=2),"%)",sep=""), ylab = paste("Dim ",axes[2]," (",format(res.ca$eig[axes[2],2],nsmall=2,digits=2),"%)",sep=""), xlim = xlim, ylim = ylim, col = "white", asp=1, ...)
     abline(h=0,lty=2,...)
     abline(v=0,lty=2,...)

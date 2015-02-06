@@ -14,7 +14,7 @@ Draw the Multiple Factor Analysis (MFA) graphs.
     lab.grpe=TRUE, lab.var=TRUE, lab.ind=TRUE, 
     lab.par=FALSE, lab.col=TRUE, habillage="ind", col.hab=NULL, 
     invisible = c("none","ind","ind.sup","quanti","quanti.sup",
-	"quali","row","row.sup","col","col.sup"), 
+	"quali","quali.sup","row","row.sup","col","col.sup"), 
 	partial = NULL, lim.cos2.var = 0., 
     chrono = FALSE, xlim = NULL, ylim = NULL, 
     title = NULL, palette = NULL, 
@@ -41,7 +41,8 @@ Draw the Multiple Factor Analysis (MFA) graphs.
   \item{col.hab}{the colors to use. By default, colors are chosen}
   \item{invisible}{list of string; for choix ="ind", the individuals can be omit (invisible = "ind"),
   or supplementary individuals (invisible="ind.sup") or the center of gravity of the categorical variables 
-  (invisible= "quali"); if invisible = c("ind","ind.sup"), just the centers of gravity are drawn; if choix="var", invisible="quanti" suppress the
+  (invisible= "quali" or "quali.sup" for the supplementary categories); 
+  if invisible = c("ind","ind.sup"), just the centers of gravity are drawn; if choix="var", invisible="quanti" suppress the
   active variable and invisible = "quanti.sup" suppress the supplementary variables}
   \item{partial}{list of the individuals or of the center of gravity for which the partial points should be drawn (by
   default, partial = NULL and no partial points are drawn)}
@@ -89,9 +90,36 @@ res <- MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
     num.group.sup=c(1,6),graph=FALSE)
 plot(res, choix = "ind")
 plot(res, choix = "ind", partial="all")
-plot(res, choix = "Terroir")
+plot(res, choix = "ind", habillage="Label")
 plot(res, choix = "var", habillage="group")
 plot(res, choix = "axes")
+
+data(wine)
+res <- MFA(wine, group=c(2,5,3,10,9,2), type=c("n",rep("s",5)),
+    ncp=5, name.group=c("orig","olf","vis","olfag","gust","ens"),
+    num.group.sup=c(1,6))
+summary(res)
+barplot(res$eig[,1],main="Eigenvalues",names.arg=1:nrow(res$eig))
+
+#### Confidence ellipses around categories per variable
+plotellipses(res)
+plotellipses(res,keepvar="Label") ## for 1 variable
+
+#### Interactive graph
+liste = plotMFApartial(res)
+plot(res,choix="ind",habillage = "Terroir")
+
+###Example with groups of categorical variables
+data (poison)
+MFA(poison, group=c(2,2,5,6), type=c("s","n","n","n"),
+    name.group=c("desc","desc2","symptom","eat"),
+    num.group.sup=1:2)
+
+###Example with groups of frequency tables
+data(mortality)
+res<-MFA(mortality,group=c(9,9),type=c("f","f"),
+    name.group=c("1979","2006"))
+
 }
 }
 \keyword{dplot}

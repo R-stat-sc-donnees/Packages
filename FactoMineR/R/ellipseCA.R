@@ -20,7 +20,7 @@ if (method=="boot"){   ## botstrap  of the values by rows
   aux = X
   ni = apply(X,1,sum)
   for (i in 1:nbsample) {
-   for (ri in 1:nrow(X)) aux[ri,]=summary(cut(sample(1:ni[ri],ni[ri],replace=TRUE),c(0,cumsum(t(X[ri,])))+0.1/ni[ri]*(0:ncol(X))))
+   for (ri in 1:nrow(X)) aux[ri,]=summary(cut(sample(1:ni[ri],ni[ri],replace=TRUE),c(0,cumsum(t(X[ri,])))+0.1/ni[ri]*(0:ncol(X))),maxsum=Inf)
    if ("col"%in%ellipse) concCol = cbind.data.frame(concCol,aux)
    if ("row"%in%ellipse) concRow = rbind.data.frame(concRow,aux)
   }
@@ -57,14 +57,16 @@ if ("row"%in%ellipse){
   }
   plot(x,axes=axes,xlim=xlim,ylim=ylim,col.col=col.col,col.row=col.row,...)
   if ("row"%in%ellipse){
+  lev<-paste("row",1:nlevels(ellRow[, 1]),sep="")
   for (e in 1:nlevels(ellRow[, 1])) {
-      data.elli <- ellRow[ellRow[, 1] == levels(ellRow[, 1])[e], -1]
+      data.elli <- ellRow[ellRow[, 1] == lev[e], -1]
 	  lines(x=data.elli[, 1], y = data.elli[, 2], col = col.row.ell[e])
     }   
   }
   if ("col"%in%ellipse){
+   lev<-paste("col",1:nlevels(ellCol[, 1]),sep="")
    for (e in 1:nlevels(ellCol[, 1])) {
-      data.elli <- ellCol[ellCol[, 1] == levels(ellCol[, 1])[e], -1]
+      data.elli <- ellCol[ellCol[, 1] == lev[e], -1]
 	  lines(x=data.elli[, 1], y = data.elli[, 2], col = col.col.ell[e])
     }   
   }
